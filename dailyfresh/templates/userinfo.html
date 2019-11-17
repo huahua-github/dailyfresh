@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
+    <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <style type="text/css">
+        *{
+            margin:0;
+            padding:0;
+        }
+        .header{
+            height: 100px;
+            width:100%;
+            background-color: lightblue;
+        }
+        .header h2{
+            height: 100%;
+            width: 100px;
+            line-height: 100px;
+            text-align: center;
+        }
+        .container{
+            width:100%;
+            height: 500px;
+        }
+        .container .title{
+            float:left;
+            width: 20%;
+            height: 100%;
+            background-color: bisque;
+        }
+        .container .message{
+            float: left;
+            width:80%;
+            height: 100%;
+            position: relative;
+        }
+        .title h3{
+            width:100%;
+            height:10%;
+            line-height:50px;
+            text-align: center;
+            border-bottom: 1px solid grey;
+        }
+        .title ul{
+            list-style: none;
+            font-size: 20px;
+            width: 100%;
+        }
+        .title ul li{
+            height: 50px;
+            width: 100%;
+            text-align: center;
+            line-height: 50px;
+
+        }
+        .list li:hover{
+            background-color: red;
+            cursor: pointer;
+        }
+
+        .message div{
+
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-color: cadetblue;
+            left: 0;
+            top:0;
+
+        }
+        .show{
+            z-index: 9999;
+        }
+        .address h2{
+            width:500px;
+            height:10%;
+            background-color: red;
+        }
+        .address ul{
+            width:500px;
+            height: 30%;
+            background-color: white;
+            list-style: none;
+            margin-bottom: 50px;
+
+        }
+        .address ul li{
+
+            margin-bottom: 5px;
+            width:100%;
+            height:28px;
+            line-height: 30px;
+        }
+        .address .form{
+            width:500px;
+            height:60%;
+            background-color: black;
+        }
+
+
+    </style>
+    <script>
+        $(function(){
+            $(".list").delegate("li","click",function(){
+               const index = $(this).index();
+                $(".message div").eq(index).css({"z-index":9999});
+                $(".message div").eq(index).siblings().css({"z-index":0});
+               // $(".message").children()[index].style="z-index:9999;";
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h2>用户中心</h2>
+    </div>
+
+    <div class="container">
+        <div class="title">
+            <h3>用户中心</h3>
+            <ul class="list">
+                <li>个人信息</li>
+                <li>全部订单</li>
+                <li>收货地址</li>
+            </ul>
+
+        </div>
+
+        <div class="message">
+            <div class="yonghu">这是用户个人信息页面</div>
+            <div class="totleorder">这是用户订单信息页面</div>
+            <div class="address">
+                <h3>默认收货地址</h3>
+                <ul>
+                    <li><span>收货地址：</span><span></span></li>
+                    <li><span>收件人：</span><span></span></li>
+                    <li><span>联系电话：</span><span></span></li>
+                </ul>
+
+                    <form >
+                        <label for="at">收货地址：</label>
+                        <textarea cols="50" rows="3" id="at"></textarea><br><br>
+                         <label for="ren">收件人:&nbsp;&nbsp;</label>
+                        <input type="text" name="ren" id="ren"/><br><br>
+                        <label for="yz">邮政编码:</label>
+                        <input type="text" name="youzheng" id="yz"/><br><br>
+                        <label for="dh">联系电话:</label>
+                        <input type="text" name="phone" id="dh"/><br><br>
+                        <button id="but">提交</button>
+                    </form>
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+</html>

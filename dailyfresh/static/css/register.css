@@ -1,0 +1,50 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+.register{
+    width:300px;
+    margin:100px auto 0;
+}
+.retool{
+    height:50px;
+    width:100%;
+    background-color: gold;
+    clear: both;
+}
+.retool:before,.retool:after{
+    content: "";
+    display: table;
+
+}
+.retool:after{
+    clear: both;
+}
+.retool h2{
+    float:left;
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    margin-left: 10px;
+}
+.retool .loginbut{
+    height:50px;
+    width:50px;
+    float:right;
+    margin-right: 30px;
+    /*background-color: red;*/
+}
+.retool .loginbut a{
+    display: block;
+    font-size: 20px;
+    height:50px;
+    width:100%;
+    text-align: center;
+    line-height: 50px;
+}
+.reform{
+    width: 100%;
+    background-color: lightgray;
+    padding:10px;
+}

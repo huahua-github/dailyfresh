@@ -1,0 +1,11 @@
+.clearfix:before,.clearfix:after{
+    content:"";
+    display:table;
+}
+.clearfix:after{
+    clear:both;
+}
+/*这个是为兼容IE浏览器清除浮动*/
+.clearfix:after{
+    zoom: 1;
+}

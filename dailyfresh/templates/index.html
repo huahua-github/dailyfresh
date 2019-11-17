@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>天天生鲜</title>
+    <style type="text/css">
+        *{
+            margin:0;
+            padding:0;
+        }
+        .meau-box{
+            border:1px solid grey;
+            list-style:none;
+            background-color: lightgrey;
+            height:30px;
+            text-align: right;
+            padding:0 40px;
+            position:relative;
+        }
+        .meau-box li{
+            display:inline-block;
+            height:20px;
+            margin:4px 8px 0;
+        }
+        .meau-box li a{
+            display: inline-block;
+            height:20px;
+            line-height:20px;
+            text-decoration:none;
+            font:normal 16px "Microsoft YaHei"
+            color:black;
+        }
+        .meau-box li a:hover{
+            background-color: aqua;
+            color:white;
+        }
+        .myinfo{
+            /*background-color: red;*/
+            position: absolute;
+            left:40px;
+        }
+        .one-box{
+            /*background-color: lightgrey;*/
+            padding:20px;
+        }
+        .one-box>div{
+            float:left;
+            margin:0 60px;
+        }
+        .one-box:before, .one-box:after{
+            content:"";
+            display:table;
+        }
+        .one-box:after{
+            clear:both;
+        }
+        .one-box{
+            zoom:1;
+        }
+        .one-box .input{
+            margin: 0;
+
+        }
+        .one-box .sercher{
+            margin-left: 0;
+            background-color: green;
+            width:80px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+        }
+        .one-box .input input{
+            width:500px;
+            height:40px;
+            border:1px solid lightgrey;
+            border-left: none;
+            outline:none;
+
+
+        }
+        .one-box .mycar{
+            border:1px solid grey;
+            background-color: moccasin;
+            position:relative;
+
+
+        }
+        .one-box .mycar div{
+            float:left;
+            height: 44px;
+
+        }
+        .one-box .mycar .icon01{
+            width:40px;
+            height:40px;
+            background: url("{% static 'image/11.png' %}") 6px 6px no-repeat;
+
+
+
+        }
+        .one-box .mycar .tet{
+            /*background-color: red;*/
+            height:44px;
+            line-height: 44px;
+            margin:0 10px;
+            color:grey;
+
+        }
+        .one-box .mycar .icon02{
+            width:40px;
+            height:40px;
+            background: url("{% static 'image/12.png' %}") 10px 6px no-repeat;
+            position: absolute;
+            left:130px;
+            opacity:0.3;
+            /*兼容IE透明*/
+            filter:alpha(opacity=30);
+
+        }
+        .one-box .ser-icon{
+
+            width:40px;
+            height:40px;
+            border:1px solid lightgrey;
+            margin-right:-1px;
+            background:url("{% static 'image/so.png' %}") no-repeat;
+
+
+        }
+        .two-box{
+            border-bottom: 1px solid black;
+        }
+        .two-box .content01{
+            height:40px;
+            width:1250px;
+            margin:0 auto 0;
+            background-color: lightgrey;
+        }
+        .two-box .content01 h3{
+            float:left;
+            height:40px;
+            width:300px;
+            background-color: green;
+            line-height: 40px;
+            text-align: center;
+        }
+        .two-box .content01 ul{
+            float:left;
+            list-style: none;
+            overflow: hidden;
+        }
+        .two-box .content01 ul li{
+            float:left;
+            border-left: 1px solid black;
+            padding:0 20px;
+            height:30px;
+            line-height: 30px;
+            margin-top: 5px;
+            margin-left: -1px;
+
+        }
+        .two-box .content01 ul li a{
+            display:block;
+            text-decoration:none;
+            color:black;
+
+        }
+        .two-box .content01 ul li a:hover{
+            background-color: green;
+            color:white;
+        }
+        .three-box{
+            border-bottom: 1px solid black;
+        }
+        .three-box .content02{
+            width:1250px;
+            height:255px;
+            margin:0 auto 0;
+            /*background-color: lightgrey;*/
+        }
+        .three-box .content02 .fenlei{
+            /*border:1px solid black;*/
+            width:300px;
+            float:left;
+
+        }
+        .three-box .content02 .fenlei ul{
+            list-style:none;
+            overflow: hidden;
+        }
+        .three-box .content02 .fenlei ul li{
+            height:50px;
+            line-height: 50px;
+            text-align:center;
+            border:1px solid coral;
+            margin-top:-1px;
+            background: url("{% static 'image/11.png' %}") 10px 10px no-repeat;
+        }
+        .three-box .content02 .fenlei ul li a{
+            display:block;
+            text-decoration: none;
+        }
+        .three-box .content02 .fenlei ul li a:hover{
+            background-color: lightgreen;
+        }
+        .content03{
+            float:left;
+            width:641px;
+            height:255px;
+            overflow: hidden;
+            position:relative;
+        }
+        .icon03{
+            list-style:none;
+
+            /*height:500px;*/
+            background-color:coral;
+            float:left;
+            position:relative;
+        }
+        .icon03 li{
+            float:left;
+        }
+        .icon03 .one-13{
+            position:absolute;
+            left:-640px;
+        }
+        .next-icon{
+            float:left;
+            width:50px;
+            height:50px;
+            background: url("{% static 'image/16.png' %}") -50px top no-repeat ;
+            background:rgba(0.3);
+            position:absolute;
+            left:580px;
+            top:100px;
+            z-index:9999;
+            cursor:pointer;
+            opacity:0.5;
+
+        }
+        .before-icon{
+             float:left;
+            width:50px;
+            height:50px;
+            background: url("{% static 'image/16.png' %}") 0px top no-repeat;
+            position:absolute;
+            left:10px;
+            top:100px;
+            z-index:9999;
+            cursor:pointer;
+        }
+        .yuan-icon{
+            /*background-color: red;*/
+            width:72px;
+            height:11px;
+            float:left;
+            list-style: none;
+            position:absolute;
+            left:300px;
+            top:230px;
+            z-index:9999;
+        }
+        .yuan-icon li{
+            float:left;
+            margin:0 4px;
+            width:10px;
+            height:10px;
+            background-color: grey;
+            border-radius:50%;
+            cursor:pointer;
+
+        }
+        .yuan-icon .yuan-icon01{
+            background-color: lightgrey;
+        }
+    </style>
+</head>
+<body>
+    <ul class="meau-box">
+        <li class="myinfo"><span>欢迎来到天天生鲜!</span></li>
+        {% if user.is_authenticated %}
+            <span style="font-style: italic;">访问用户： {{ user.username }}</span>
+            <li><a href="{% url 'logout' %}">退出</a></li>
+            <li><span>|</span></li>
+            <li><a href="{% url 'showuserinfo' %}">个人中心</a></li>
+        {% else %}
+        <li><a href="{% url 'showlogin' %}">登陆</a></li>
+        <li><span>|</span></li>
+        <li><a href="{% url 'showregister' %}">注册</a></li>
+        {% endif %}
+        <li><span>|</span></li>
+        <li><a href="#">我的购物车</a></li>
+        <li><span>|</span></li>
+        <li><a href="#">我的订单</a></li>
+    </ul>
+    <div class="one-box">
+        <div class="icon"><img src="{% static 'image/tt.png' %}"></div>
+        <div class="ser-icon"></div>
+        <div class="input"><input type="text" name="serch" placeholder="搜索" ></div>
+        <div class="sercher"><a>搜索</a></div>
+        <div class="mycar">
+            <div class="icon01"></div>
+            <div class="tet"><a href="#">我的购物车</a></div>
+            <div class="icon02"></div>
+        </div>
+    </div>
+    <div class="two-box">
+        <div class="content01">
+            <h3>全部商品分类</h3>
+        <ul>
+            <li><a href="#">首页</a></li>
+            <li><a href="#">今日特价</a></li>
+            <li><a href="#">商品推荐</a></li>
+            <li><a href="#">今日热卖</a></li>
+        </ul>
+        </div>
+
+    </div>
+    <div class="three-box">
+        <div class="content02">
+            <div class="fenlei">
+            <ul>
+                <li><a href="#">水果</a></li>
+                <li><a href="#">蔬菜</a></li>
+                <li><a href="#">鲜肉</a></li>
+                <li><a href="#">活禽</a></li>
+                <li><a href="#">海鲜</a></li>
+            </ul>
+        </div>
+        <div class="content03">
+            <div class="next-icon"></div>
+            <div class="before-icon"></div>
+            <ul class="icon03">
+                <li class="one-13"><img src="{% static 'image/13.png' %}"></li>
+                <li><img src="{% static 'image/14.png' %}"></li>
+                <li><img src="{% static 'image/15.png' %}"></li>
+                <li><img src="{% static 'image/13.png' %}"></li>
+            </ul>
+            <ul class="yuan-icon">
+                <li class="yuan-icon01"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+
+        <div class="guanggao">
+
+        </div>
+        </div>
+
+    </div>
+</body>
+</html>

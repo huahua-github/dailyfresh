@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}"/>
+    <script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("#but").click(function(){
+               let username = $("#name").val();
+               let password = $("#pwd").val();
+               let repassword = $("#repwd").val();
+               let email = $("#email").val();
+               let csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+                if (username.trim()==""){
+                    alert("sdfsdf");
+                    $("#namemessage").html("用户名不能为空！").css({color:"red"});
+                    return false;
+                }
+                if(password.trim()==""){
+                    $("#pwdmessage").html("密码不能为空！").css({color:"red"});
+                    return false;
+                }
+                if(repassword.trim()==""){
+                    $("#repwdmessage").html("请输入确认密码").css({color:"red"});
+                    return false;
+                }
+                if(password.trim()!=repassword.trim()){
+                    $("#repwdmessage").html("输入的两次密码不一致").css({color:"red"});
+                    return false;
+                }
+                if(email.trim()==""){
+                    $("#emailmessage").html("请输入邮箱地址").css({color:"red"});
+                    return false;
+                }
+               const re = new RegExp("[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}");
+                let bool = re.test(email);
+                if (bool==false){
+                    $("#emailmessage").html("输入邮箱的格式不正确").css({color:"red"});
+                    return false;
+                }
+                $.ajax({
+                    url: "register",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {username:username,password:password,repassword:repassword,email:email,csrfmiddlewaretoken:csrfmiddlewaretoken}
+                }).done(function(data){
+                    if(data.message=="OK"){
+                        window.location.href="showlogin";
+                    }else{
+                        alert(data.message);
+                    }
+
+                }).fail(function(){
+                    alert("连接服务器超时！")
+                })
+
+
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="register">
+        <div class="retool">
+            <h2>用户注册</h2>
+            <div class="loginbut">
+                <a href="showlogin">登陆</a>
+            </div>
+        </div>
+        <div class="reform">
+            <form action="register" method="post">
+                {% csrf_token %}
+                <label for="name">用户名：</label>&nbsp;
+                <input type="text" name="username" id="name"/><br><span id="namemessage"></span><br>
+                <label for="pwd">密码:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="password" name="password" id="pwd"/><br><span id="pwdmessage"></span><br>
+                <label for="repwd">确认密码:</label>
+                <input type="password" name="repassword" id="repwd"/><br><span id="repwdmessage"></span><br>
+                <label for="email">邮箱:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="email" name="useremail" id="email"/><br><span id="emailmessage"></span><br>
+                <input type="checkbox" name="access" id="access"/>同意"天天生鲜用户使用协议"<br><br>
+                <input type="button" name="btn" value="注册" id="but"/>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/register.css"/>
+    <script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
+    <script>
+        $(function(){
+            alert($("#access").prop("checked"));
+            $("#but").click(function(){
+               let username = $("#name").val();
+               let password = $("#pwd").val();
+               let merusername = $("#access").prop("checked");
+               alert(merusername);
+               let csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+                if (username.trim()==""){
+
+                    $("#namemessage").html("用户名不能为空！").css({color:"red"});
+                    return false;
+                }
+                if(password.trim()==""){
+                    $("#pwdmessage").html("密码不能为空！").css({color:"red"});
+                    return false;
+                }
+
+
+                $.ajax({
+                    url: "login",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {username:username,password:password,merusername:merusername,csrfmiddlewaretoken:csrfmiddlewaretoken}
+                }).done(function(data){
+
+                    if(data.message=="OK"){
+
+                        window.location.href=$("#nexturl").val();
+                    }else{
+                        alert(data.message);
+                    }
+
+                }).fail(function(){
+                    alert("连接服务器超时！")
+                })
+
+
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="register">
+        <div class="retool">
+            <h2>用户登陆</h2>
+            <div class="loginbut">
+                <a href="showregister">注册</a>
+            </div>
+        </div>
+        <div class="reform">
+            <form action="register" method="post">
+                {% csrf_token %}
+                <label for="name">用户名：</label>&nbsp;
+                <input type="text" name="username" id="name" value='{{ username }}' /><br><span id="namemessage"></span><br>
+                <label for="pwd">密码:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="password" name="password" id="pwd"/><br><span id="pwdmessage"></span><br>
+                <input type="checkbox" name="access" id="access"  {{ checked }}/>记住用户<br><br>
+                <input type="button" name="btn" value="登陆" id="but"/>
+            </form>
+        </div>
+    </div>
+    <input type="hidden" name="nexturl" id="nexturl" value="{{ next_url }}"/>
+</body>
+</html>
