@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from apps.user.models import User
+from apps.user.models import Address
 from django.http import HttpResponse,JsonResponse,response
 from django.views.generic import View
 from django.urls import reverse
@@ -8,6 +9,8 @@ from dailyfresh.settings import SECRET_KEY,EMAIL_HOST_USER
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate,login,logout
 import time
+import json
+from django.core.serializers import serialize
 from celery_task.tasks import send_register_email
 from utils.loginrequriedUtil import LoginRequiredMixin
 # Create your views here.
@@ -184,4 +187,48 @@ class userlogout(View):
 class userinfo(LoginRequiredMixin,View):
 
     def get(self,request):
-        return render(request,"userinfo.html")
+        # 获取收货地址列表
+        address_list = Address.objects.all().filter(user=request.user)
+        addrinfo = Address.objects.get_default_addr(request.user)
+
+
+        return render(request,"userinfo.html",{"addressinfo":address_list,"addrinfo":addrinfo})
+
+"""/adduserinfo----增加收货地址信息"""
+class adduserinfo(LoginRequiredMixin,View):
+    def post(self,request):
+
+        addr = request.POST.get("address")
+
+        receiver = request.POST.get("receiver")
+
+        zip_code = request.POST.get("zip_code")
+        phone = request.POST.get("phone")
+
+        user = request.user
+        try:
+            useraddr = Address.objects.get(user=user)
+        except Exception:
+            useraddr = None
+        address = Address()
+        if all([address,receiver,phone]):
+            address.user = user
+            address.addr = addr
+            address.receiver = receiver
+            address.zip_code = zip_code
+            address.phone = phone
+            if useraddr == None:
+                address.is_default=True
+            address.save()
+            """
+            json序列化：1、当查询结果是queryset时需要用serialize方法进行序列化
+            2、当查询结果是valuequeryset时将结果集装换为list类型后用json.dumps方法序列化
+            
+            """
+            addrinfo = Address.objects.get_default_addr(request.user)
+            addre_list =list(Address.objects.all().filter(user = user).values("addr","receiver","phone"))
+            message = {"message":"OK"}
+            addre_list.append(message)
+            return HttpResponse(json.dumps({"json_data":addre_list,"message":"OK","addrinfo":addrinfo}))
+        else:
+            return JsonResponse({"message":"表单数据不完整！"})
