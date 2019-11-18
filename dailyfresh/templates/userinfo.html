@@ -10,6 +10,7 @@
         *{
             margin:0;
             padding:0;
+            box-sizing: border-box;
         }
         .header{
             height: 100px;
@@ -94,6 +95,11 @@
             width:100%;
             height:28px;
             line-height: 30px;
+            padding-left: 5px;
+        }
+        .address ul li span{
+            display: inline-block;
+            width:33.3%;
         }
         .address .form{
             width:500px;
@@ -111,6 +117,52 @@
                 $(".message div").eq(index).siblings().css({"z-index":0});
                // $(".message").children()[index].style="z-index:9999;";
             })
+            // 提交表单
+            $("#but01").click(function(){
+                const address = $("#at").val();
+                const receiver = $("#ren").val();
+                const zip_code = $("#yz").val();
+                const phone = $("#dh").val();
+                const csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+                if (address.trim()==""||address=="undefind"){
+                    $("#addremessage").text("收货地址不能为空");
+                    return false;
+                }
+                if (receiver.trim()==""||receiver=="undefind"){
+                    $("#addremessage").text("收货地址不能为空");
+                    return false;
+                }
+                if (phone.trim()==""||phone=="undefind"){
+                    $("#addremessage").text("收货地址不能为空");
+                    return false;
+                }
+                $.ajax({
+                    url: "adduserinfo",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {address:address,receiver:receiver,zip_code:zip_code,phone:phone,csrfmiddlewaretoken:csrfmiddlewaretoken}
+                }).done(function(data){
+                    alert(JSON.stringify(data));
+                    if(data.message=="OK"){
+                        const len = data.json_data.length;
+                        $(".ulist").html("");
+                        html_text=" <li><span>收货地址</span><span>收件人</span><span>联系电话</span></li>";
+                        for(let i=0;i<len-1;i++){
+                            html_text+="<li><span>"+data.json_data[i].addr+"</span><span>"+data.json_data[i].receiver+"</span><span>"+data.json_data[i].phone+"</span></li>";
+                        }
+                        $(".ulist").html(html_text);
+                        $("#userphone").text(data.addrinfo.phone);
+                        $("#useraddr").text(data.addrinfo.addr);
+                    }
+
+                }).fail(function(){
+
+                    alert("服务器连接超时");
+                })
+
+
+            })
+
         })
     </script>
 </head>
@@ -131,26 +183,34 @@
         </div>
 
         <div class="message">
-            <div class="yonghu">这是用户个人信息页面</div>
+            <div class="yonghu">
+                <ul>
+                    <li><span>用户姓名：</span><span>{{ request.user.username }}</span></li>
+                    <li><span>联系方式：</span><span id="userphone">{{ addrinfo.phone }}</span></li>
+                    <li><span>联系地址：</span><span id="useraddr">{{ addrinfo.addr }}</span></li>
+                </ul>
+            </div>
             <div class="totleorder">这是用户订单信息页面</div>
             <div class="address">
                 <h3>默认收货地址</h3>
-                <ul>
-                    <li><span>收货地址：</span><span></span></li>
-                    <li><span>收件人：</span><span></span></li>
-                    <li><span>联系电话：</span><span></span></li>
+                <ul class="ulist">
+                    <li><span>收货地址</span><span>收件人</span><span>联系电话</span></li>
+                    {% for info in addressinfo %}
+                    <li><span>{{ info.addr }}</span><span>{{info.receiver}}</span><span>{{info.phone}}</span></li>
+                    {% endfor %}
                 </ul>
 
-                    <form >
+                    <form>
+                        {% csrf_token %}
                         <label for="at">收货地址：</label>
-                        <textarea cols="50" rows="3" id="at"></textarea><br><br>
+                        <textarea cols="50" rows="3" id="at"></textarea><br><span id="addremessage"></span><br>
                          <label for="ren">收件人:&nbsp;&nbsp;</label>
                         <input type="text" name="ren" id="ren"/><br><br>
                         <label for="yz">邮政编码:</label>
                         <input type="text" name="youzheng" id="yz"/><br><br>
                         <label for="dh">联系电话:</label>
                         <input type="text" name="phone" id="dh"/><br><br>
-                        <button id="but">提交</button>
+                        <input type="button" id="but01" value="提交"/>
                     </form>
 
 
