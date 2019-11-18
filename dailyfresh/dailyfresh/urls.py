@@ -32,5 +32,6 @@ urlpatterns = [
     re_path(r'^showindex',userviews.showindex.as_view(),name="showindex"),
     path('showcart',userviews.showcart.as_view(),name="showcart"),
     path('logout',userviews.userlogout.as_view(),name="logout"),
-    path('showuserinfo',userviews.userinfo.as_view(),name="showuserinfo")
+    path('showuserinfo',userviews.userinfo.as_view(),name="showuserinfo"),
+    path('adduserinfo',userviews.adduserinfo.as_view(),name="adduserinfo"),
 ]
