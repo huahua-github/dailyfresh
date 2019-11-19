@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render,redirect
 from apps.user.models import User
 from apps.user.models import Address
@@ -11,8 +13,11 @@ from django.contrib.auth import authenticate,login,logout
 import time
 import json
 from django.core.serializers import serialize
-from celery_task.tasks import send_register_email
+from celery_tasks.task import send_register_email
 from utils.loginrequriedUtil import LoginRequiredMixin
+from django.template import loader
+from dailyfresh import settings
+# from celery_tasks.task import generate_static_userinfo_html
 # Create your views here.
 # /showregister
 def showregister(request):
@@ -190,8 +195,13 @@ class userinfo(LoginRequiredMixin,View):
         # 获取收货地址列表
         address_list = Address.objects.all().filter(user=request.user)
         addrinfo = Address.objects.get_default_addr(request.user)
-
-
+        context={"addressinfo":address_list,"addrinfo":addrinfo}
+        #
+        # template = loader.get_template("userinfo.html")
+        # userinfo_html = template.render(context)
+        # with open(os.path.join(settings.BASE_DIR,"static/html/userinfo_static.html"),'w',encoding="utf8") as f:
+        #     f.write(userinfo_html)
+        # generate_static_userinfo_html.delay(request,context)
         return render(request,"userinfo.html",{"addressinfo":address_list,"addrinfo":addrinfo})
 
 """/adduserinfo----增加收货地址信息"""
