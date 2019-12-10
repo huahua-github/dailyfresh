@@ -6,7 +6,6 @@ from dailyfresh.settings import EMAIL_HOST_USER
 from django.urls import reverse
 import os
 import django
-from dailyfresh import settings
 from apps.user.models import Address
 from django.template import loader
 
