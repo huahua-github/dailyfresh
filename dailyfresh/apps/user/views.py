@@ -3,7 +3,7 @@ import os
 from django.shortcuts import render,redirect
 from apps.user.models import User
 from apps.user.models import Address
-from django.http import HttpResponse,JsonResponse,response
+from django.http import HttpResponse,JsonResponse,response,HttpRequest
 from django.views.generic import View
 from django.urls import reverse
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -17,6 +17,7 @@ from celery_tasks.task import send_register_email
 from utils.loginrequriedUtil import LoginRequiredMixin
 from django.template import loader
 from dailyfresh import settings
+from django.core.cache import cache
 # from celery_tasks.task import generate_static_userinfo_html
 # Create your views here.
 # /showregister
@@ -148,17 +149,24 @@ class userlogin(View):
 
         # user = User.objects.get(username=username,password=password)
         user = authenticate(username=username,password=password)  # django认证机制内置
+        print(user.username)
         if user!=None:
             if user.is_active:
+                print("+++++++++++++++++++")
                 login(request,user)
+                print("+++++++++++++++++++")
                 if merusername=="true":
 
                     response = JsonResponse({"message": "OK", "username": username})
                     response.set_cookie("username",username)
                 else:
-                    print("==================")
+
                     response = JsonResponse({"message": "OK", "username": username,})
+
                     response.delete_cookie("username")
+
+
+                    print("==================")
                 return response
             else:
                 return JsonResponse({"message":"账号尚未激活不能登陆"})
@@ -193,16 +201,22 @@ class userinfo(LoginRequiredMixin,View):
 
     def get(self,request):
         # 获取收货地址列表
-        address_list = Address.objects.all().filter(user=request.user)
-        addrinfo = Address.objects.get_default_addr(request.user)
-        context={"addressinfo":address_list,"addrinfo":addrinfo}
+        context = cache.get("addressinfo")
+        if context is None:
+            print("++++++++++++++++++++++++++++++++++")
+            address_list = Address.objects.all().filter(user=request.user)
+            addrinfo = Address.objects.get_default_addr(request.user)
+
+            context={"addressinfo":address_list,"addrinfo":addrinfo}
+            cache.set("addressinfo",context,3600)
+
         #
         # template = loader.get_template("userinfo.html")
         # userinfo_html = template.render(context)
         # with open(os.path.join(settings.BASE_DIR,"static/html/userinfo_static.html"),'w',encoding="utf8") as f:
         #     f.write(userinfo_html)
         # generate_static_userinfo_html.delay(request,context)
-        return render(request,"userinfo.html",{"addressinfo":address_list,"addrinfo":addrinfo})
+        return render(request,"userinfo.html",context)
 
 """/adduserinfo----增加收货地址信息"""
 class adduserinfo(LoginRequiredMixin,View):

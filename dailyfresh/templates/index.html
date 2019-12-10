@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>天天生鲜</title>
+    <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
     <style type="text/css">
         *{
             margin:0;
@@ -276,6 +277,26 @@
             background-color: lightgrey;
         }
     </style>
+    <script>
+        $(function(){
+            $("#ulist").delegate("li","click",function(){
+                const id = $(this).index();
+                $.ajax({
+                    url: "showhistory",
+                    type: "GET",
+                    dataType: "JSON",
+                    data: {id:id}
+                }).done(function(data){
+
+                    if(data.message=="OK"){
+                       alert(data.infos)
+                    }
+                }).fail(function(){
+                    alert("连接服务器报错！")
+                })
+            })
+        })
+    </script>
 </head>
 <body>
     <ul class="meau-box">
@@ -321,12 +342,12 @@
     <div class="three-box">
         <div class="content02">
             <div class="fenlei">
-            <ul>
-                <li><a href="#">水果</a></li>
-                <li><a href="#">蔬菜</a></li>
-                <li><a href="#">鲜肉</a></li>
-                <li><a href="#">活禽</a></li>
-                <li><a href="#">海鲜</a></li>
+            <ul id="ulist">
+                <li><a href="javascript:void(0)">水果</a></li>
+                <li><a href="javascript:void(0)">蔬菜</a></li>
+                <li><a href="javascript:void(0)">鲜肉</a></li>
+                <li><a href="javascript:void(0)">活禽</a></li>
+                <li><a href="javascript:void(0)">海鲜</a></li>
             </ul>
         </div>
         <div class="content03">

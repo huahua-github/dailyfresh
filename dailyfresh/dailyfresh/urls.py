@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,re_path
 from apps.user import views as userviews
+from apps.goods import views as goodviews
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator  # 是将类装饰器转换为方法装饰器
 
@@ -34,4 +35,7 @@ urlpatterns = [
     path('logout',userviews.userlogout.as_view(),name="logout"),
     path('showuserinfo',userviews.userinfo.as_view(),name="showuserinfo"),
     path('adduserinfo',userviews.adduserinfo.as_view(),name="adduserinfo"),
+    path('uploadfile',goodviews.uploadfile.as_view(),name="uploadfile"),
+    path('showuploadhtml',goodviews.showuploadhtml.as_view(),name="showuploadhtml"),
+    path('showhistory',goodviews.showhistory.as_view(),name="showhistory")
 ]

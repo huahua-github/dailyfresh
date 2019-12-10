@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>上传图片</title>
+    <script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
+    <style type="text/css">
+
+    </style>
+    <script>
+        $(function(){
+            $("#but").click(function(){
+                const formdata = new FormData($("#form")[0]);
+                $.ajax({
+                    url: "uploadfile",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: formdata,
+                    contentType: false,
+                    processData: false
+                }).done(function(data){
+                    alert(data.message)
+                }).fail(function(){
+                    alert("连接服务器超时");
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+    <form id="form">
+        {% csrf_token %}
+        <div class="product_type">
+            <label for="typename">商品类别名称：</label>
+            <input type="text" name="typename" id="typename"/><br><br>
+            <label for="logo">商品图片标识</label>
+            <input type="text" name="logo" id="logo"/><br><br>
+            <input type="file" name="typeimage" id="typeimage"/>
+
+        </div>
+        <div class="product_SPU">
+            <label for="spuname">商品SPU名称：</label>
+            <input type="text" name="spuname" id="spuname"/><br><br>
+            <label for="disc">商品详情:</label>
+            <textarea rows="20" cols="50" name="disc"></textarea>
+        </div>
+        <div class="product_SKU">
+            <label for="skuname">商品SKU名称：</label>
+            <input type="text" name="skuname" id="skuname"/><br><br>
+            <label for="simpdisc">商品简介：</label>
+            <input type="text" name="simpdisc" id="simpdisc"/><br><br>
+            <label for="price">商品单价：</label>
+            <input type="text" name="price" id="price"/><br><br>
+            <label for="danwei">商品单位</label>
+            <input type="text" name="danwei" id="danwei"/><br><br>
+            <label for="imagefile">商品图片：</label>
+            <input type="file" name="imagefile" id="imagefile"/><br><br>
+            <label for="kucun">商品库存</label>
+            <input type="text" name="kucun" id="kucun"/><br><br>
+            <label for="totle">商品销量：</label>
+            <input type="text" name="totle" id="totle"/><br><br>
+            <label for="status">状态</label>
+            <input type="text" name="status" id="status"/><br><br>
+
+        </div>
+        <input type="button" name="but" id="but" value="提交"/>
+    </form>
+</body>
+</html>

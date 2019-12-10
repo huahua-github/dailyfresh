@@ -27,7 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+# 配置上传文件路径
+MEDIA_ROOT = os.path.join(BASE_DIR, "static/upload_image")
+MEDIA_URL = '/upload_image/'
 # Application definition
 
 INSTALLED_APPS = [
@@ -159,7 +161,7 @@ CACHES = {
         "LOCATION": "redis://127.0.0.1:6379",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            # "CONNECTION_POOL_KWARGS": {"max_connections": 100}
+            # "CONNECTION_POOL_KWARGS": {"decode_responses": True}
             # "PASSWORD": "123",
         }
     }
